@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMEI to Unlock Network Code Generator for ZTE ZX297520V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%232ecc71' d='M28 4H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM10 8h4v4h-4V8zm6 0h4v4h-4V8zm6 0h4v4h-4V8zM10 14h4v4h-4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM10 20h4v4h-4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z'/%3E%3C/svg%3E">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        .card {
+            background: #252525;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            margin: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #ffffff;
+        }
+        .description {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #b0b0b0;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            margin: 0 auto 0.5rem;
+            flex-direction: row;
+        }
+        .imei-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            flex-shrink: 0;
+        }
+        .input-wrapper {
+            position: relative;
+            flex-grow: 1;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 50px 12px 16px;
+            font-size: 1rem;
+            background-color: #2f2f2f;
+            color: #e0e0e0;
+            border: 2px solid #555;
+            border-radius: 10px;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            transform: scale(1.02);
+        }
+        input[type="text"]:not(:placeholder-shown):focus {
+            border-color: #2ecc71;
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
+        }
+        input[type="text"]::placeholder {
+            color: #888;
+        }
+        input.invalid {
+            border-color: #ff4d4d !important;
+            animation: shake 0.3s ease-in-out;
+        }
+        input.valid {
+            border-color: #2ecc71 !important;
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        #digit-counter {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+        #error-message {
+            color: #ff4d4d;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.5rem;
+            min-height: 0;
+            text-align: center;
+            transition: min-height 0.2s;
+        }
+        #error-message:not(:empty) {
+            min-height: 1.2rem;
+        }
+        #result {
+            margin-top: 0;
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+        #result.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .result-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-direction: row;
+            background: #2f2f2f;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .unlock-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            flex-shrink: 0;
+        }
+        .copy-button, .paste-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .copy-button:hover, .paste-button:hover {
+            transform: scale(1.1);
+        }
+        .copy-button:active, .paste-button:active {
+            transform: scale(0.9);
+        }
+        .copy-button.copied svg.copy-icon {
+            display: none;
+        }
+        .copy-button.copied svg.check-icon {
+            display: inline;
+        }
+        .copy-icon, .check-icon, .paste-icon {
+            width: 20px;
+            height: 20px;
+            fill: #2ecc71;
+        }
+        .check-icon {
+            display: none;
+        }
+        .unlock-code {
+            color: #2ecc71;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .copyright {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #888;
+            text-align: center;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        .copyright a {
+            color: #888;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        .copyright a:hover {
+            color: #2ecc71;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        @media (max-width: 600px) {
+            .card {
+                margin: 0.5rem;
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.7rem;
+            }
+            .description {
+                font-size: 0.9rem;
+            }
+            input[type="text"] {
+                font-size: 0.9rem;
+                padding: 10px 40px 10px 12px;
+            }
+            #digit-counter {
+                font-size: 0.75rem;
+            }
+            .imei-label {
+                font-size: 0.9rem;
+            }
+            .copyright {
+                font-size: 0.8rem;
+            }
+            #error-message {
+                font-size: 0.8rem;
+            }
+            .result-container {
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 400px) {
+            .input-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            .imei-label {
+                text-align: center;
+            }
+            .input-wrapper {
+                width: 100%;
+            }
+            .paste-button {
+                margin: 0.5rem auto 0;
+                align-self: center;
+            }
+            .result-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .unlock-label {
+                text-align: center;
+            }
+            .unlock-code {
+                text-align: center;
+            }
+            .copyright {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>ZTE ZX297520V3 IMEI to Unlock Code Generator</h1>
+        <p class="description">Calculate an unlock network code for ZTE ZXIC SZXF ZX297520V3-based Mobile Broadband devices, such as the Hisense H220M / MTN MIFI 4G router.</p>
+        <div class="input-container">
+            <label for="imeiInput" class="imei-label">IMEI:</label>
+            <div class="input-wrapper">
+                <input type="text" id="imeiInput" placeholder="Enter exactly 15 digits" aria-describedby="error-message digit-counter">
+                <div id="digit-counter">0/15</div>
+            </div>
+            <div class="tooltip">
+                <button class="paste-button" aria-label="Paste IMEI from clipboard">
+                    <svg class="paste-icon" viewBox="0 0 24 24" title="Paste">
+                        <path d="M19 2h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/>
+                    </svg>
+                </button>
+                <span class="tooltip-text">Paste from clipboard</span>
+            </div>
+        </div>
+        <div id="error-message" aria-live="polite"></div>
+        <div id="result" class="result-container"></div>
+        <p class="copyright"><a href="https://github.com/kozik47" target="_blank" rel="noopener noreferrer">© Copyright 2025 Kozik47</a></p>
+    </div>
+
+    <script>
+        // Configuration for unlock code generation
+        const TRANSFORM_MAP = {
+            0: 1, 1: 3, 2: 5, 3: 7, 4: 9, 5: 0, 6: 2, 7: 4, 8: 6, 9: 8
+        };
+
+        // Sanitizes input to remove non-digits and limit to 15 characters
+        function sanitizeInput(input) {
+            return input.replace(/[^\d]/g, '').slice(0, 15);
+        }
+
+        // Formats IMEI for display (e.g., 12-345678-901234-5)
+        function formatIMEI(imei) {
+            return imei.replace(/(\d{2})(\d{6})(\d{6})(\d{1})/, '$1-$2-$3-$4');
+        }
+
+        // Validates IMEI using Luhn algorithm
+        function validateIMEICheckDigit(imei) {
+            const digits = imei.split('').map(Number);
+            let sum = 0;
+            for (let i = 0; i < 14; i++) {
+                let digit = digits[i];
+                if (i % 2 === 1) {
+                    digit *= 2;
+                    sum += Math.floor(digit / 10) + (digit % 10);
+                } else {
+                    sum += digit;
+                }
+            }
+            const checkDigit = (10 - (sum % 10)) % 10;
+            return checkDigit === digits[14];
+        }
+
+        // Sets error message in a centralized way
+        function setError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.setAttribute('role', 'alert');
+        }
+
+        // Generates unlock code for a valid IMEI
+        function generateUnlockCode(imei, resultDiv) {
+            if (!validateIMEICheckDigit(imei)) {
+                setError('Invalid IMEI check digit');
+                resultDiv.innerHTML = '';
+                return false;
+            }
+            const digits = imei.split('').map(Number);
+            const transformed = digits.map(d => TRANSFORM_MAP[d] !== undefined ? TRANSFORM_MAP[d] : 0);
+            const unlockDigits = [];
+            for (let i = 0; i < 8; i++) {
+                const sumVal = transformed.slice(i, i + 8).reduce((sum, num) => sum + num, 0);
+                unlockDigits.push(sumVal % 10);
+            }
+            const unlockCode = unlockDigits.join('');
+            resultDiv.innerHTML = `
+                <span class="unlock-label">Unlock Code:</span>
+                <span class="unlock-code">${unlockCode}</span>
+                <div class="tooltip">
+                    <button class="copy-button" aria-label="Copy unlock network code">
+                        <svg class="copy-icon" viewBox="0 0 24 24" title="Copy">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                        <svg class="check-icon" viewBox="0 0 24 24" title="Copied">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </button>
+                    <span class="tooltip-text">Copy to clipboard</span>
+                </div>
+            `;
+            resultDiv.classList.add('visible');
+            // Bind copy button event
+            document.querySelector('.copy-button').addEventListener('click', () => copyToClipboard(unlockCode));
+            return true;
+        }
+
+        // Copies text to clipboard with fallback
+        async function copyToClipboard(text) {
+            const button = document.querySelector('.copy-button');
+            try {
+                await navigator.clipboard.writeText(text);
+                button.classList.add('copied');
+                setTimeout(() => button.classList.remove('copied'), 2000);
+            } catch (err) {
+                fallbackCopy(text, button);
+            }
+        }
+
+        // Fallback for clipboard copy
+        function fallbackCopy(text, button) {
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                button.classList.add('copied');
+                setTimeout(() => button.classList.remove('copied'), 2000);
+            } catch (err) {
+                setError('Unable to copy. Browser may not support clipboard access.');
+            }
+        }
+
+        // Pastes text from clipboard and validates
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const sanitizedText = sanitizeInput(text);
+                if (!/^\d{2}-\d{6}-\d{6}-\d{1}$|^\d{15}$/.test(text.replace(/\s/g, ''))) {
+                    setError('Pasted IMEI must be 15 digits or in AA-BBBBBB-CCCCCC-D format');
+                    return;
+                }
+                if (sanitizedText.length !== 15) {
+                    setError('Pasted IMEI must be exactly 15 digits');
+                    return;
+                }
+                const input = document.getElementById('imeiInput');
+                input.value = sanitizedText;
+                validateInput(input);
+            } catch (err) {
+                setError('Clipboard access blocked.');
+            }
+        }
+
+        // Validates and processes input
+        function validateInput(input) {
+            const rawValue = sanitizeInput(input.value);
+            const resultDiv = document.getElementById('result');
+            const digitCounter = document.getElementById('digit-counter');
+
+            // Update digit counter
+            digitCounter.textContent = `${rawValue.length}/15`;
+
+            // Reset result visibility
+            resultDiv.classList.remove('visible');
+
+            // Update border color and error message
+            if (rawValue.length === 0) {
+                input.classList.remove('valid', 'invalid');
+                setError('');
+                resultDiv.innerHTML = '';
+            } else if (rawValue.length < 15) {
+                input.classList.remove('valid');
+                input.classList.add('invalid');
+                setError('IMEI must be exactly 15 digits');
+                resultDiv.innerHTML = '';
+            } else if (!validateIMEICheckDigit(rawValue)) {
+                input.classList.remove('valid');
+                input.classList.add('invalid');
+                setError('Invalid IMEI check digit');
+                resultDiv.innerHTML = '';
+            } else {
+                input.classList.remove('invalid');
+                input.classList.add('valid');
+                setError('');
+                generateUnlockCode(rawValue, resultDiv);
+            }
+
+            // Update input value with formatted or raw value
+            input.value = rawValue.length === 15 && validateIMEICheckDigit(rawValue) ? formatIMEI(rawValue) : rawValue;
+        }
+
+        // Initialize event listeners
+        const input = document.getElementById('imeiInput');
+        input.addEventListener('input', function(e) {
+            const cursorPosition = this.selectionStart;
+            const currentValue = this.value.replace(/[-\s]/g, '');
+            const lastChar = currentValue.slice(-1);
+            const isValidChar = /^\d$/.test(lastChar) || lastChar === '';
+
+            if (!isValidChar && currentValue.length > 0) {
+                this.value = currentValue.slice(0, -1);
+                setError('Only digits are allowed');
+                validateInput(this);
+                this.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
+            } else {
+                validateInput(this);
+                const rawValue = sanitizeInput(this.value);
+                const formattedValue = rawValue.length === 15 && validateIMEICheckDigit(rawValue) ? formatIMEI(rawValue) : rawValue;
+                const newCursorPosition = cursorPosition + (formattedValue.length - currentValue.length);
+                this.setSelectionRange(newCursorPosition, newCursorPosition);
+            }
+        });
+
+        input.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const sanitizedText = sanitizeInput(pastedText);
+            if (!/^\d{2}-\d{6}-\d{6}-\d{1}$|^\d{15}$/.test(pastedText.replace(/\s/g, ''))) {
+                setError('Pasted IMEI must be 15 digits or in AA-BBBBBB-CCCCCC-D format');
+                return;
+            }
+            if (sanitizedText.length !== 15) {
+                setError('Pasted IMEI must be exactly 15 digits');
+                return;
+            }
+            this.value = sanitizedText;
+            validateInput(this);
+        });
+
+        document.querySelector('.paste-button').addEventListener('click', pasteFromClipboard);
+
+        // Auto-paste on page load if clipboard contains valid IMEI
+        window.addEventListener('load', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                const sanitizedText = sanitizeInput(text);
+                if ((/^\d{2}-\d{6}-\d{6}-\d{1}$|^\d{15}$/.test(text.replace(/\s/g, ''))) && sanitizedText.length === 15) {
+                    const input = document.getElementById('imeiInput');
+                    input.value = sanitizedText;
+                    validateInput(input);
+                }
+            } catch (err) {
+                // Silently fail if clipboard access is blocked
+            }
+        });
+    </script>
+</body>
+</html>
