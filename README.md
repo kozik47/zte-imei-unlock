@@ -4,7 +4,7 @@ Two Python scripts are provided to generate unlock codes for devices utilizing t
 
 ## Hardware Description
 
-The Hisense H220m, a portable 4G LTE MiFi router, supports up to 10 concurrent Wi-Fi connections. It is powered by the ZTE ZXIC SZXF ZX297520V3 platform, incorporating an ARMv7 processor and an integrated 4G LTE modem. USB connectivity provides a virtual Ethernet interface and mass storage functionality when a micro-SD card is inserted. The hardware configuration is summarized:
+The Hisense H220m, a portable 4G LTE MiFi router, is powered by the ZTE ZX297520V3 platform, incorporating an ARMv7 processor and an integrated 4G LTE modem. USB connectivity provides a virtual Ethernet interface and mass storage functionality when a micro-SD card is inserted. The hardware configuration is summarized:
 
 | Component | Description |
 | --- | --- |
