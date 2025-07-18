@@ -28,6 +28,7 @@ The unlock code generation algorithm was determined through reverse-engineering 
 
    - A USB to TTL adapter, configured at 3.3V and 921600 baud, was used to capture the UART output.
    - The boot log indicated the device was utilizing U-Boot 2011.09 and Linux kernel 3.4.110-rt140 and also provided hardware details, including the ZX297520V3 CPU, 64 MiB RAM, and NAND flash partitions (e.g., 'rootfs' at 22 MiB).
+   - A login shell was visible on the console. It appeared that 'admin' was a valid username but the correct password could not be determined. Therefore dumping the flash was necessary to gain access to the filesystem.
 
 2. **NAND Flash Dumping**:
 
@@ -38,6 +39,7 @@ The unlock code generation algorithm was determined through reverse-engineering 
 
    - The NAND dump contained UBIFS images. Out-of-band data, including error correction codes, was removed with a small script.
    - A custom Python script was developed to extract the 'rootfs' UBIFS image, revealing the filesystem with executables and configuration files.
+   - The 'rootfs' `/etc/passwd` file contained a single entry `admin:$1$CIFeJAO5$CA0KJBqrSX6ciPKBlKV8J/:0:0:root:/:/bin/sh`. John the Ripper was run over this entry against a few common wordlists but a valid password was not found.
 
 4. **Binary Analysis**:
 
