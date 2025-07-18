@@ -525,21 +525,6 @@
         });
 
         document.querySelector('.paste-button').addEventListener('click', pasteFromClipboard);
-
-        // Auto-paste on page load if clipboard contains valid IMEI
-        window.addEventListener('load', async () => {
-            try {
-                const text = await navigator.clipboard.readText();
-                const sanitizedText = sanitizeInput(text);
-                if ((/^\d{2}-\d{6}-\d{6}-\d{1}$|^\d{15}$/.test(text.replace(/\s/g, ''))) && sanitizedText.length === 15) {
-                    const input = document.getElementById('imeiInput');
-                    input.value = sanitizedText;
-                    validateInput(input);
-                }
-            } catch (err) {
-                // Silently fail if clipboard access is blocked
-            }
-        });
     </script>
 </body>
 </html>
