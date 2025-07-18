@@ -49,7 +49,7 @@ The unlock code generation algorithm was determined through reverse-engineering 
 5. **Algorithm Determination**:
 
    - The algorithm processes the first 15 IMEI digits, mapping each via a transform map, summing eight consecutive transformed digits per position, and computing the modulo 10 result to generate each unlock code digit.
-   - Testing with known IMEI:unlock_code pairs demonstrated that two pairs generally suffice to determine the transform map using the Z3 theorem prover.
+   - Testing with known IMEI:unlock_code pairs demonstrated that two sufficiently different pairs generally suffice to determine the transform map using the Z3 theorem prover.
 
 6. **Script Development**:
 
