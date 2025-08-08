@@ -2,6 +2,8 @@
 
 Two Python scripts are provided to generate unlock codes for devices utilizing the ZTE ZXIC SZXF ZX297520V3 platform, such as the MTN Hisense H220m 4G MiFi router, and to compute the transform map integral to the unlock code algorithm. These scripts were developed through reverse-engineering of the device's firmware which enabled discovery of the network unlock code generation mechanism.
 
+Additionally, a client-side webpage for generating unlock codes was developed on the `gh-pages` branch and is deployed at <https://kozik47.github.io/zte-imei-unlock>
+
 ## Hardware Description
 
 The Hisense H220m, a portable 4G LTE MiFi router, is powered by the ZTE ZX297520V3 platform, incorporating an ARMv7 processor and an integrated 4G LTE modem. USB connectivity provides a virtual Ethernet interface and mass storage functionality when a micro-SD card is inserted. The hardware configuration is summarized:
@@ -44,7 +46,7 @@ The unlock code generation algorithm was determined through reverse-engineering 
 4. **Binary Analysis**:
 
    - The  `/bin/goahead` binary was analyzed using Ghidra.
-   - An function with the signature `undefined FUN_00016d60(char * param_1, size_t param_2)` was identified as the unlock network code generator.
+   - A function with the signature `undefined FUN_00016d60(char * param_1, size_t param_2)` was identified as the unlock network code generator.
 
 5. **Algorithm Determination**:
 
